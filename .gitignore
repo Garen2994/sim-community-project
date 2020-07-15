@@ -90,3 +90,8 @@ buildNumber.properties
 .classpath
 .settings
 .metadata
+community.iml
+HELP.md
+mvnw
+mvnw.cmd
+.idea/
