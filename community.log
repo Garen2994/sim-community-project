@@ -1,0 +1,22 @@
+2020-07-24 20:40:25.975  INFO 59511 --- [main] com.garen.community.LoggerTest           : Starting LoggerTest on garen-houtekiMacBook-Air.local with PID 59511 (started by garen_hou in /Users/garen_hou/Desktop/GH's workspace/Garen_Major/sim-community-project)
+2020-07-24 20:40:25.977 DEBUG 59511 --- [main] com.garen.community.LoggerTest           : Running with Spring Boot v2.1.15.RELEASE, Spring v5.1.16.RELEASE
+2020-07-24 20:40:25.980  INFO 59511 --- [main] com.garen.community.LoggerTest           : No active profile set, falling back to default profiles: default
+2020-07-24 20:40:30.835  INFO 59511 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-07-24 20:40:30.991  INFO 59511 --- [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2020-07-24 20:40:31.514  INFO 59511 --- [main] com.garen.community.LoggerTest           : Started LoggerTest in 6.23 seconds (JVM running for 8.498)
+2020-07-24 20:40:32.056 DEBUG 59511 --- [main] com.garen.community.LoggerTest           : debug log
+2020-07-24 20:40:32.057  INFO 59511 --- [main] com.garen.community.LoggerTest           : info log
+2020-07-24 20:40:32.057  WARN 59511 --- [main] com.garen.community.LoggerTest           : warn log
+2020-07-24 20:40:32.057 ERROR 59511 --- [main] com.garen.community.LoggerTest           : error log
+2020-07-24 20:40:32.072  INFO 59511 --- [Thread-2] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2020-07-24 20:44:16.694  INFO 59703 --- [main] com.garen.community.LoggerTest           : Starting LoggerTest on garen-houtekiMacBook-Air.local with PID 59703 (started by garen_hou in /Users/garen_hou/Desktop/GH's workspace/Garen_Major/sim-community-project)
+2020-07-24 20:44:16.696 DEBUG 59703 --- [main] com.garen.community.LoggerTest           : Running with Spring Boot v2.1.15.RELEASE, Spring v5.1.16.RELEASE
+2020-07-24 20:44:16.697  INFO 59703 --- [main] com.garen.community.LoggerTest           : No active profile set, falling back to default profiles: default
+2020-07-24 20:44:21.212  INFO 59703 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-07-24 20:44:21.396  INFO 59703 --- [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2020-07-24 20:44:21.955  INFO 59703 --- [main] com.garen.community.LoggerTest           : Started LoggerTest in 6.029 seconds (JVM running for 8.443)
+2020-07-24 20:44:22.561 DEBUG 59703 --- [main] com.garen.community.LoggerTest           : debug log
+2020-07-24 20:44:22.562  INFO 59703 --- [main] com.garen.community.LoggerTest           : info log
+2020-07-24 20:44:22.562  WARN 59703 --- [main] com.garen.community.LoggerTest           : warn log
+2020-07-24 20:44:22.562 ERROR 59703 --- [main] com.garen.community.LoggerTest           : error log
+2020-07-24 20:44:22.577  INFO 59703 --- [Thread-2] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
