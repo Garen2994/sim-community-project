@@ -18,7 +18,7 @@ public class MailClient {
     @Autowired
     private JavaMailSender mailSender;
     
-    @Value("${spring.mail.username}")
+    @Value("hjl52994@sina.com")
     private String from;
     public void sendMail(String to, String subject, String content){
         MimeMessage message = mailSender.createMimeMessage();
@@ -32,5 +32,6 @@ public class MailClient {
         } catch (MessagingException e) {
             logger.error("Send Error" + e.getMessage());
         }
+    
     }
 }
