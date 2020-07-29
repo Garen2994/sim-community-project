@@ -1,6 +1,8 @@
 package com.garen.community.service;
 
+import com.garen.community.dao.LoginTicketMapper;
 import com.garen.community.dao.UserMapper;
+import com.garen.community.entity.LoginTicket;
 import com.garen.community.entity.User;
 import com.garen.community.util.CommunityConstant;
 import com.garen.community.util.CommunityUtil;
@@ -29,8 +31,10 @@ public class UserService implements CommunityConstant {
     @Autowired
     private TemplateEngine templateEngine;
     
-    //注入固定的值而不是Bean时,用@Value
+    @Autowired
+    private LoginTicketMapper loginTicketMapper;
     
+    //注入固定的值而不是Bean时,用@Value
     @Value("${community.path.domain}")
     private String domain;
     
@@ -40,10 +44,12 @@ public class UserService implements CommunityConstant {
     public User findUserById(int id) {
         return userMapper.selectById(id);
     }
+    /* *********Register and Activation Model***********/
+    
     /**
      * @description 用map存错误信息 返回给客户端
      * @param user
-     * @return java.util.Map<java.lang.String,java.lang.Object>
+     * @return java.util.Map<java.lang.String, java.lang.Object>
      */
     public Map<String, Object> register(User user) {
         Map<String, Object> map = new HashMap<>();
@@ -74,7 +80,6 @@ public class UserService implements CommunityConstant {
             return map;
         }
         
-        //注册
         user.setSalt(CommunityUtil.generateUUID().substring(0, 5));
         user.setPassword(CommunityUtil.md5(user.getPassword() + user.getSalt()));
         user.setType(0); //普通用户
@@ -112,5 +117,56 @@ public class UserService implements CommunityConstant {
         } else {
             return ACTIVATION_FAILURE;
         }
+    }
+    
+    /* ********Login Model********** */
+    
+    /**
+     * @description 返回的错误信息用Map存
+     * @param username
+     * @param password
+     * @return java.util.Map<java.lang.String, java.lang.Object>
+     */
+    public Map<String, Object> login(String username, String password, int expiredSeconds) {
+        Map<String, Object> map = new HashMap<>();
+        //空值处理
+        if (StringUtils.isBlank(username)) {
+            map.put("usernameMsg", "用户名不能为空！");
+            return map;
+        }
+        if (StringUtils.isBlank(password)) {
+            map.put("passwordMsg", "密码不能为空！");
+            return map;
+        }
+        //验证
+        User user = userMapper.selectByName(username);
+        if (user == null) {
+            map.put("usernameMsg", "该用户不存在！");
+            return map;
+        }
+        if (user.getStatus() == 0) {
+            map.put("usernameMsg", "该账号尚未激活！");
+            return map;
+        }
+        
+        password = CommunityUtil.md5(password + user.getSalt());
+        if (!user.getPassword().equals(password)) {
+            map.put("passwordMsg", "密码错误！");
+            return map;
+        }
+        
+        //生成登陆凭证
+        LoginTicket loginTicket = new LoginTicket();
+        loginTicket.setUserId(user.getId());
+        loginTicket.setTicket(CommunityUtil.generateUUID());
+        loginTicket.setStatus(0);
+        loginTicket.setExpired(new Date(System.currentTimeMillis() + expiredSeconds * 1000));
+        loginTicketMapper.insertLoginTicket(loginTicket);
+        map.put("ticket", loginTicket.getTicket());
+        return map;
+    }
+    //log out
+    public void logout(String ticket){
+        loginTicketMapper.updateStatus(ticket, 1);
     }
 }
