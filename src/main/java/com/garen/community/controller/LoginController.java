@@ -87,6 +87,8 @@ public class LoginController implements CommunityConstant {
         }
         return "/site/operate-result";
     }
+    
+    //验证码生成
     @RequestMapping(path = "/kaptcha", method = RequestMethod.GET)
     //向浏览器输出图片 手动response
     // 存放到服务器端
@@ -94,6 +96,7 @@ public class LoginController implements CommunityConstant {
         String text = kaptchaProducer.createText(); //根据配置生成字符串
         BufferedImage image = kaptchaProducer.createImage(text);
         session.setAttribute("kaptcha", text);
+//        System.out.println(session.getAttribute("kaptcha"));
         response.setContentType("image/png");
         try {
             OutputStream os = response.getOutputStream();
