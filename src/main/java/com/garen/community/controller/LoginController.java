@@ -60,15 +60,7 @@ public class LoginController implements CommunityConstant {
     public String getRegisterPage() {
         return "/site/register";
     }
-    /**
-     * @description //TODO
-     * @param
-     * @return java.lang.String
-     */
-    @RequestMapping(path = "/login", method = RequestMethod.GET)
-    public String getLoginPage() {
-        return "/site/login";
-    }
+    
     @RequestMapping(path = "/register", method = RequestMethod.POST)
     public String register(Model model, User user) {
         Map<String, Object> map = userService.register(user);
@@ -116,6 +108,16 @@ public class LoginController implements CommunityConstant {
         } catch (IOException e) {
             logger.error("响应验证码失败！" + e.getMessage());
         }
+    }
+    
+    /**
+     * @description 获取登陆页面
+     * @param
+     * @return java.lang.String
+     */
+    @RequestMapping(path = "/login", method = RequestMethod.GET)
+    public String getLoginPage() {
+        return "/site/login";
     }
     //路径可以相同 请求方式不相同
     @RequestMapping(path = "/login", method = RequestMethod.POST)
