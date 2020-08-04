@@ -1,6 +1,5 @@
 $(function(){
     $("#verifyCodeBtn").click(getVerifyCode);
-    alert("正在发送验证码到邮箱")
 });
 
 function getVerifyCode() {
