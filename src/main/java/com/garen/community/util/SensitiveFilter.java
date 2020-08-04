@@ -71,7 +71,7 @@ public class SensitiveFilter {
         try (//finally中关闭 放在()中自动关闭
             InputStream is = this.getClass().getClassLoader().getResourceAsStream("sensitive-words.txt");
             //缓冲流效率高
-             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+             BufferedReader reader = new BufferedReader(new InputStreamReader(is))
         ) {
             String keyWord;
             while((keyWord = reader.readLine()) != null){
@@ -103,7 +103,6 @@ public class SensitiveFilter {
      * @return boolean
      */
     public boolean isSymbol(Character c){
-        //0x2E80-0x9FFF为东亚文字范围
         return Pattern.matches("[^0-9a-zA-Z\u4e00-\u9fa5]", "" + c);
     }
     
