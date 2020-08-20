@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.DigestUtils;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -45,6 +46,7 @@ public class CommunityUtil {
                 json.put(key, map.get(key));
             }
         }
+        //返回JSON字符串
         return json.toJSONString();
     }
     
@@ -54,5 +56,12 @@ public class CommunityUtil {
     
     public static String getJSONString(int code) {
         return getJSONString(code, null, null);
+    }
+    
+    public static void main(String[] args) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("name","garen");
+        map.put("age", 24);
+        System.out.println(getJSONString(0, "OK", map));
     }
 }
