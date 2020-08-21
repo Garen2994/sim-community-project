@@ -96,3 +96,4 @@ mvnw
 mvnw.cmd
 .idea/
 AlphaInterceptor.java
+entity/

@@ -2,9 +2,11 @@ package com.garen.community;
 
 import com.garen.community.dao.DiscussPostMapper;
 import com.garen.community.dao.LoginTicketMapper;
+import com.garen.community.dao.MessageMapper;
 import com.garen.community.dao.UserMapper;
 import com.garen.community.entity.DiscussPost;
 import com.garen.community.entity.LoginTicket;
+import com.garen.community.entity.Message;
 import com.garen.community.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +30,7 @@ public class MapperTest {
     
     @Autowired
     private LoginTicketMapper loginTicketMapper;
+    
     @Test
     public void testSelectUser() {
         User user = userMapper.selectById(101);
@@ -78,22 +81,33 @@ public class MapperTest {
     }
     
     @Test
-    public void testInsertLoginTicket(){
+    public void testInsertLoginTicket() {
         LoginTicket loginTicket = new LoginTicket();
         loginTicket.setUserId(190);
         loginTicket.setTicket("garen ticket");
         loginTicket.setStatus(0);
         loginTicket.setExpired(new Date(System.currentTimeMillis() + 1000 * 60 * 10));
-    
+        
         loginTicketMapper.insertLoginTicket(loginTicket);
     }
+    
     @Test
-    public void testSelectLoginTicket(){
+    public void testSelectLoginTicket() {
         LoginTicket loginTicket = loginTicketMapper.selectByTicket("garen ticket");
         System.out.println(loginTicket);
         
         loginTicketMapper.updateStatus("garen ticket", 1);
         loginTicket = loginTicketMapper.selectByTicket("garen ticket");
         System.out.println(loginTicket);
-    
-    }}
+        
+    }
+    @Autowired
+    private MessageMapper messageMapper;
+    @Test
+    public void testSelectLetters(){
+        List<Message> list = messageMapper.selectConversations(111,0,20);
+        for (Message message : list) {
+            System.out.println(message);
+        }
+    }
+}
