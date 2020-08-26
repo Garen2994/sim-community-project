@@ -12,8 +12,6 @@ import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.swing.*;
-import java.sql.Time;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
