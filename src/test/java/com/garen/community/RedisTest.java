@@ -4,10 +4,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.core.BoundValueOperations;
+import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.swing.*;
 import java.sql.Time;
 import java.util.Iterator;
 import java.util.List;
@@ -90,5 +95,40 @@ public class RedisTest {
         redisTemplate.hasKey("test:student");
         
         redisTemplate.expire("test:teacher", 10, TimeUnit.SECONDS);
+    }
+    
+    //多次访问同一个key
+    @Test
+    public void testBoundOPerations(){
+        String redisKey = "test:count";
+        BoundValueOperations operations = redisTemplate.boundValueOps(redisKey);
+        operations.increment();
+        operations.increment();
+        operations.increment();
+        operations.increment();
+        operations.increment();
+        operations.increment();
+        System.out.println(operations.get());
+    }
+    
+    //编程式事务
+    @Test
+    public void testTransaction(){
+        Object obj = redisTemplate.execute(new SessionCallback(){
+            @Override
+            public Object execute(RedisOperations operations) throws DataAccessException {
+                String redisKey = "test:tx";
+                operations.multi(); //启用事务
+                
+                operations.opsForSet().add(redisKey, "kiki");
+                operations.opsForSet().add(redisKey, "zizi");
+                operations.opsForSet().add(redisKey, "lili");
+                operations.opsForSet().add(redisKey, "chichi");
+    
+                System.out.println(operations.opsForSet().members(redisKey)); // 事务未提交时 命令在队列里没执行
+                return operations.exec();
+            }
+        });
+        System.out.println(obj);
     }
 }
