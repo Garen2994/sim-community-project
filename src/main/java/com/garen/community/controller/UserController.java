@@ -2,7 +2,10 @@ package com.garen.community.controller;
 
 import com.garen.community.annotation.LoginRequired;
 import com.garen.community.entity.User;
+import com.garen.community.service.FollowService;
+import com.garen.community.service.LikeService;
 import com.garen.community.service.UserService;
+import com.garen.community.util.CommunityConstant;
 import com.garen.community.util.CommunityUtil;
 import com.garen.community.util.HostHolder;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +30,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
-public class UserController {
+public class UserController implements CommunityConstant {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     @Value("${community.path.upload}")
     private String uploadPath;
@@ -44,6 +47,12 @@ public class UserController {
     //获取当前用户
     @Autowired
     private HostHolder hostHolder;
+    
+    @Autowired
+    private LikeService likeService;
+    
+    @Autowired
+    private FollowService followService;
     
     @LoginRequired
     @RequestMapping(path = "/setting", method = RequestMethod.GET)
@@ -89,8 +98,7 @@ public class UserController {
         String suffix = filename.substring(filename.lastIndexOf(".") + 1);
         response.setContentType("image/" + suffix);
         try (//这里声明的变量在编译时自动加上finally，在finally中关闭
-             FileInputStream fis = new FileInputStream(filename);
-             OutputStream os = response.getOutputStream()) {
+             FileInputStream fis = new FileInputStream(filename); OutputStream os = response.getOutputStream()) {
             byte[] buffer = new byte[1024];
             int b = 0;
             while ((b = fis.read(buffer)) != -1) {
@@ -100,17 +108,48 @@ public class UserController {
             logger.error("读取文件失败!" + e.getMessage());
         }
     }
+    
     //修改密码
-    @RequestMapping(path = "/updatePassword",method = RequestMethod.POST)
-    public String updatePassword(String oldPassword, String newPassword, Model model){
+    @RequestMapping(path = "/updatePassword", method = RequestMethod.POST)
+    public String updatePassword(String oldPassword, String newPassword, Model model) {
         User user = hostHolder.getUser();
         Map<String, Object> map = userService.updatePassword(user.getId(), oldPassword, newPassword);
-        if(map == null || map.isEmpty()){
+        if (map == null || map.isEmpty()) {
             return "redirect:/logout";
-        }else{
-            model.addAttribute("oldPasswordMsg",map.get("oldPasswordMsg"));
-            model.addAttribute("newPasswordMsg",map.get("newPasswordMsg"));
+        } else {
+            model.addAttribute("oldPasswordMsg", map.get("oldPasswordMsg"));
+            model.addAttribute("newPasswordMsg", map.get("newPasswordMsg"));
             return "/site/setting";
         }
+    }
+    
+    // 个人主页
+    @RequestMapping(path = "/profile/{userId}", method = RequestMethod.GET)
+    public String getProfilePage(@PathVariable("userId") int userId, Model model) {
+        User user = userService.findUserById(userId);
+        if (user == null) {
+            throw new RuntimeException("该用户不存在!");
+        }
+        
+        // 用户
+        model.addAttribute("user", user);
+        // 点赞数量
+        int likeCount = likeService.findUserLikeCount(userId);
+        model.addAttribute("likeCount", likeCount);
+        
+        //关注数量
+        long followeeCount = followService.findFolloweeCount(userId, ENTITY_TYPE_USER);
+        model.addAttribute("followeeCount",followeeCount);
+        //粉丝数量
+        long followerCount = followService.findFollowerCount(ENTITY_TYPE_USER,userId);
+        model.addAttribute("followerCount",followerCount);
+        //是否已关注
+        boolean hasFollowed = false;
+        if (hostHolder.getUser() != null) {
+            hasFollowed = followService.hasFollowed(hostHolder.getUser().getId(), ENTITY_TYPE_USER, userId);
+        }
+        model.addAttribute("hasFollowed", hasFollowed);
+        
+        return "/site/profile";
     }
 }
