@@ -4,6 +4,8 @@ import com.garen.community.entity.LoginTicket;
 import org.apache.ibatis.annotations.*;
 
 @Mapper
+//不推荐使用
+@Deprecated
 public interface LoginTicketMapper {
     @Insert({"insert into login_ticket(user_id, ticket, status, expired) " ,
             "values(#{userId}, #{ticket}, #{status}, #{expired})"
