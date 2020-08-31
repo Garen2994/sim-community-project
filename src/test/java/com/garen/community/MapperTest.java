@@ -8,6 +8,8 @@ import com.garen.community.entity.DiscussPost;
 import com.garen.community.entity.LoginTicket;
 import com.garen.community.entity.Message;
 import com.garen.community.entity.User;
+import com.garen.community.service.MessageService;
+import com.garen.community.util.CommunityConstant;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes = SimCommunityApplication.class)
-public class MapperTest {
+public class MapperTest  implements CommunityConstant{
     @Autowired
     private UserMapper userMapper;
     
@@ -102,12 +104,20 @@ public class MapperTest {
         
     }
     @Autowired
-    private MessageMapper messageMapper;
-    @Test
-    public void testSelectLetters(){
-        List<Message> list = messageMapper.selectConversations(111,0,20);
-        for (Message message : list) {
-            System.out.println(message);
-        }
+    private MessageService messageService;
+//    @Test
+//    public void testSelectLetters(){
+//        List<Message> list = messageMapper.selectConversations(111,0,20);
+//        for (Message message : list) {
+//            System.out.println(message);
+//        }
+//    }
+    ;@Test
+    public void testSelectNotice(){
+        messageService.findNoticeCount(159, TOPIC_COMMENT);
+        messageService.findNoticeUnreadCount(159, TOPIC_FOLLOW);
+        messageService.findLatestNotice(159, TOPIC_LIKE);
+        System.out.println(messageService.findNotices(159, TOPIC_FOLLOW, 0, 20).toArray());
+        
     }
 }
