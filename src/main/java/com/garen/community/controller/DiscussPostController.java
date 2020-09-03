@@ -9,8 +9,9 @@ import com.garen.community.service.UserService;
 import com.garen.community.util.CommunityConstant;
 import com.garen.community.util.CommunityUtil;
 import com.garen.community.util.HostHolder;
-import org.joda.time.DateTime;
+import com.garen.community.util.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.*;
+
 @Controller
 @RequestMapping("/discuss")
 public class DiscussPostController implements CommunityConstant {
@@ -41,10 +43,14 @@ public class DiscussPostController implements CommunityConstant {
     @Autowired
     private EventProducer eventProducer;
     
+    @Autowired
+    private RedisTemplate redisTemplate;
+    
     @RequestMapping(path = "/add", method = RequestMethod.POST)
     @ResponseBody
     public String addDiscussPost(String title, String content) {
         User user = hostHolder.getUser();
+        System.out.println(user.getUsername()+"AAAAAAAAAaaaaa啊啊啊啊啊啊啊啊啊啊啊");
         if (user == null) {
             return CommunityUtil.getJSONString(403, "你还没有登录哦!");
         }
@@ -56,7 +62,7 @@ public class DiscussPostController implements CommunityConstant {
         post.setCreateTime(new Date());
         discussPostService.addDiscussPost(post);
         
-        //触发发帖事件
+        // 触发发帖事件
         Event event = new Event()
                 .setTopic(TOPIC_PUBLISH)
                 .setUserId(user.getId())
@@ -64,7 +70,9 @@ public class DiscussPostController implements CommunityConstant {
                 .setEntityId(post.getId());
         eventProducer.fireEvent(event);
         
-        
+        // 计算帖子分数
+        String redisKey = RedisKeyUtil.getPostScoreKey();
+        redisTemplate.opsForSet().add(redisKey, post.getId());
         
         // 报错的情况,将来统一处理.
         return CommunityUtil.getJSONString(0, "发布成功!");
@@ -154,13 +162,14 @@ public class DiscussPostController implements CommunityConstant {
         
         return "/site/discuss-detail";
     }
+    
     // 置顶
     @RequestMapping(path = "/top", method = RequestMethod.POST)
     @ResponseBody
     public String setTop(int id) {
-        discussPostService.updateType(id, 1);//置顶对应类型'1'
+        discussPostService.updateType(id, 1);
         
-        // 触发发帖事件 同步更改至ES
+        // 触发发帖事件
         Event event = new Event()
                 .setTopic(TOPIC_PUBLISH)
                 .setUserId(hostHolder.getUser().getId())
@@ -170,6 +179,7 @@ public class DiscussPostController implements CommunityConstant {
         
         return CommunityUtil.getJSONString(0);
     }
+    
     // 加精
     @RequestMapping(path = "/wonderful", method = RequestMethod.POST)
     @ResponseBody
@@ -184,6 +194,10 @@ public class DiscussPostController implements CommunityConstant {
                 .setEntityId(id);
         eventProducer.fireEvent(event);
         
+        // 计算帖子分数
+        String redisKey = RedisKeyUtil.getPostScoreKey();
+        redisTemplate.opsForSet().add(redisKey, id);
+        
         return CommunityUtil.getJSONString(0);
     }
     
@@ -192,6 +206,7 @@ public class DiscussPostController implements CommunityConstant {
     @ResponseBody
     public String setDelete(int id) {
         discussPostService.updateStatus(id, 2);
+        
         // 触发删帖事件
         Event event = new Event()
                 .setTopic(TOPIC_DELETE)
@@ -202,4 +217,5 @@ public class DiscussPostController implements CommunityConstant {
         
         return CommunityUtil.getJSONString(0);
     }
+    
 }

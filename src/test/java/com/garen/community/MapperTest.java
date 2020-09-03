@@ -8,6 +8,7 @@ import com.garen.community.entity.DiscussPost;
 import com.garen.community.entity.LoginTicket;
 import com.garen.community.entity.Message;
 import com.garen.community.entity.User;
+import com.garen.community.service.DiscussPostService;
 import com.garen.community.service.MessageService;
 import com.garen.community.util.CommunityConstant;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.xml.crypto.Data;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +29,8 @@ public class MapperTest  implements CommunityConstant{
     @Autowired
     private UserMapper userMapper;
     
+    @Autowired
+    private DiscussPostService discussPostService;
     @Autowired
     private DiscussPostMapper discussPostMapper;
     
@@ -75,6 +79,20 @@ public class MapperTest  implements CommunityConstant{
             System.out.println(post);
         }
     }
+    @Test
+    public void testAddPost() {
+        DiscussPost post = new DiscussPost();
+         post.setTitle("aaa");
+         post.setContent("nihaonihao,Offer");
+         post.setUserId(280);
+         post.setStatus(1);
+         post.setType(0);
+         post.setCreateTime(new Date());
+         post.setScore(2);
+        discussPostService.addDiscussPost(post);
+        
+    }
+    
     
     @Test
     public void testSelectPostRows() {
