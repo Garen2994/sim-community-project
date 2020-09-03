@@ -24,7 +24,6 @@ public class DataInterceptor implements HandlerInterceptor {
         // 统计UV
         String ip = request.getRemoteHost();
         dataService.recordUV(ip);
-        
         // 统计DAU
         User user = hostHolder.getUser();
         if (user != null) {//登陆才记录
