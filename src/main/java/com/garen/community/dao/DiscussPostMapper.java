@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper
 public interface DiscussPostMapper {
-    List<DiscussPost> selectDiscussPosts(int userId, int offset, int limit); //userId is dynamic
+    List<DiscussPost> selectDiscussPosts(int userId, int offset, int limit,int orderMode); //userId is dynamic
     //page-divide
    
     //@Param用于给参数取别名
