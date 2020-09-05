@@ -34,6 +34,8 @@
 * MySQL、Redis、Kafka、Elasticsearch、Wkhtmltopdf
 * Putty(访问服务器的客户端)
 
+![](https://img.garenhou.com/Aliyun.png)
+
 ## 项目总结
 
 ![](https://img.garenhou.com/%E6%8A%80%E6%9C%AF%E5%92%8C%E4%B8%9A%E5%8A%A1.png)
