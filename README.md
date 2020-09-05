@@ -3,6 +3,7 @@
  <img src="https://img.shields.io/badge/Language-Java-blue" alt="Java" style="vertical-align:top; margin:4px">
  <img src="https://img.shields.io/badge/Framework-Spring-9cf" alt="Spring" style="vertical-align:top; margin:4px">
    <img src="https://img.shields.io/badge/Database-MySQL-orange" alt="MYSQL" style="vertical-align:top; margin:4px">
+  <img src="https://img.shields.io/badge/Database-Redis-yellow" alt="MYSQL" style="vertical-align:top; margin:4px">
  <img src="https://img.shields.io/badge/Author-Garen_Hou-green" alt="me" style="vertical-align:top; margin:4px">
 </p>
 
