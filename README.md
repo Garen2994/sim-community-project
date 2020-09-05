@@ -58,3 +58,7 @@
 #### 项目完整的网站架构如下：
 
 ![](https://img.garenhou.com/%E7%BD%91%E7%AB%99%E6%9E%B6%E6%9E%84%E5%9B%BE.png)
+
+#### 代码统计:keyboard:
+
+![](https://img.garenhou.com/counting.png)
