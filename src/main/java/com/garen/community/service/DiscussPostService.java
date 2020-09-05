@@ -110,7 +110,6 @@ public class DiscussPostService {
         if(post == null){
             throw new IllegalArgumentException("帖子不能为空");
         }
-        System.out.println("运行到这里");
         //转义HTML标记 <script> 这种标签转义
         post.setTitle(HtmlUtils.htmlEscape(post.getTitle()));
         post.setContent(HtmlUtils.htmlEscape(post.getContent()));
